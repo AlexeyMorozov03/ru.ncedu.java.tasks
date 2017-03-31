@@ -36,7 +36,7 @@ public class ControlFlowStatements1Impl implements ControlFlowStatements1{
 
         //test calculateBankDeposit()
         BankDeposit deposit = new BankDeposit();
-        deposit = object.calculateBankDeposit(0.10);
+        deposit = object.calculateBankDeposit(12.5);
         System.out.println(deposit.toString());
     }
 
@@ -100,7 +100,7 @@ public class ControlFlowStatements1Impl implements ControlFlowStatements1{
     public BankDeposit calculateBankDeposit(double P) {
         BankDeposit object = new BankDeposit();
         object.amount = 1000;
-
+        P /= 100;
         while (object.amount <= 5000){
             object.years += 1;
             object.amount += object.amount * P;
