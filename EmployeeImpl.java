@@ -6,14 +6,11 @@ public class EmployeeImpl implements Employee {
     private int salary;
     private Employee manager;
 
-    EmployeeImpl(){
-        firstName = null;
-        lastName = null;
+    public EmployeeImpl(){
         salary = 1000;
-        manager = null;
     }
 
-    EmployeeImpl(String firstNameEmployee, String lastNameEmployee, int salarySize, Employee localManager){
+    public EmployeeImpl(String firstNameEmployee, String lastNameEmployee, int salarySize, Employee localManager){
         setFirstName(firstNameEmployee);
         setLastName(lastNameEmployee);
         salary = salarySize;
@@ -76,34 +73,5 @@ public class EmployeeImpl implements Employee {
         else{
             return manager.getTopManager();
         }
-    }
-
-    public static void main(String... args){
-        EmployeeImpl a = new EmployeeImpl("John", "Newman", 5000, null);
-
-        EmployeeImpl b = new EmployeeImpl();
-        b.setFirstName("Neil");
-        b.setLastName("Masuro");
-        b.increaseSalary(1600);
-        b.setManager(a);
-
-        EmployeeImpl c = new EmployeeImpl("Zack", "Hougher", 1500, b);
-
-        System.out.println("Full name: " + a.getFullName());
-        System.out.println("Salary: " + a.getSalary());
-        System.out.println("Manager: " + a.getManagerName());
-        System.out.println();
-
-        System.out.println("Full name: " + b.getFullName());
-        System.out.println("Salary: " + b.getSalary());
-        System.out.println("Manager: " + b.getManagerName());
-        System.out.println();
-
-        System.out.println("Full name: " + c.getFullName());
-        System.out.println("Salary: " + c.getSalary());
-        System.out.println("Manager: " + c.getManagerName());
-        System.out.println();
-
-        System.out.println("Top manager: " + c.getTopManager().getFullName());
     }
 }
