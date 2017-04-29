@@ -1,7 +1,6 @@
 package ru.ncedu.java.tasks;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class TestStringFilter {
 
@@ -59,7 +58,43 @@ public class TestStringFilter {
         }
     }
 
+    public  static void testGetStringsStartingWith(){
+        StringFilter a = new StringFilterImpl();
+        a.add("Abcdef");
+        a.add("XYZdef");
+        a.add(" abc");
+        a.add("abcdeef");
+        //a.add(null);
+        Iterator<String> i = a.getStringsStartingWith("");
+        for (;i.hasNext();){
+            System.out.println(i.next());
+        }
+    }
+
+    public  static void testGetStringsByNumberFormat(){
+        StringFilter a = new StringFilterImpl();
+        a.add("Abcdef");
+        a.add("XYZdef");
+        a.add(" abc");
+        a.add("abcdeef");
+        //a.add(null);
+
+        a.add("(000)000-0000");
+        a.add("(000)000-0001");
+        a.add("(100)000-0000");
+
+        a.add("0 000");
+        a.add("0000");
+
+        a.add("-0.00");
+        //"(###)###-####", "# ###", "-#.##"
+        Iterator<String> i = a.getStringsByNumberFormat( "");
+        for (;i.hasNext();){
+            System.out.println(i.next());
+        }
+    }
+
     public  static void main(String... args){
-        testGetStringsContaining();
+        testGetStringsByNumberFormat();
     }
 }

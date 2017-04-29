@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import static java.lang.Character.isDigit;
+
 public class StringFilterImpl implements StringFilter {
     private Set set = new HashSet();
 
@@ -58,12 +60,49 @@ public class StringFilterImpl implements StringFilter {
 
     @Override
     public Iterator<String> getStringsStartingWith(String begin) {
-        return null;
+        String beginLowerCase = null;
+        if (begin != null){
+            beginLowerCase = begin.toLowerCase();
+        }
+        Set<String> result = new HashSet<String>();
+
+        for (Iterator<String> i = set.iterator(); i.hasNext();){
+            String s = i.next();
+            if ((beginLowerCase == null) || (s.indexOf(beginLowerCase) == 0)){
+                result.add(s);
+            }
+        }
+
+        Iterator<String> iterator = result.iterator();
+        return iterator;
     }
 
     @Override
     public Iterator<String> getStringsByNumberFormat(String format) {
-        return null;
+        Set<String> result = new HashSet<String>();
+
+        for (Iterator<String> i = set.iterator(); i.hasNext();){
+            String s = i.next();
+            if ((format == null) || (format.length() == 0)){
+                result.add(s);
+            }else if (s.length() == format.length()){
+                boolean error = false;
+                for (int j = 0; j < format.length(); j++){
+                    if ((format.toCharArray()[j] == '#') && (!isDigit(s.toCharArray()[j]))){
+                        error = true;
+                    }
+                    if ((format.toCharArray()[j] != '#') && (format.toCharArray()[j] != s.toCharArray()[j])){
+                        error = true;
+                    }
+                }
+                if (!error){
+                    result.add(s);
+                }
+            }
+        }
+
+        Iterator<String> iterator = result.iterator();
+        return iterator;
     }
 
     @Override
