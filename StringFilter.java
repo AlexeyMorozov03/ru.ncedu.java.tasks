@@ -42,7 +42,7 @@ import java.util.Iterator;
  *
  * @author Alexey Evdokimov
  */
-public interface StringFilter {
+public abstract interface StringFilter {
     /**
      * Добавляет строку s в набор, приводя ее к нижнему регистру.
      * Если строка s уже есть в наборе, ничего не делает.

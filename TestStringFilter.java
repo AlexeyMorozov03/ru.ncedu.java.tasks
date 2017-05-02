@@ -94,7 +94,30 @@ public class TestStringFilter {
         }
     }
 
+    public  static void testGetStringsByPattern(){
+        StringFilter a = new StringFilterImpl();
+        a.add("Abcdef");
+        a.add("XYZdef");
+        a.add(" abc");
+        a.add("abcdeef");
+        //a.add(null);
+        a.add("(000)000-0000");
+        a.add("(000)000-0001");
+        a.add("(100)000-0000");
+        a.add("0 000");
+        a.add("0000");
+        a.add("-0.00");
+        a.add("abdef");
+        a.add("abdf");
+
+
+        Iterator<String> i = a.getStringsByPattern( "ab*d*f");
+        for (;i.hasNext();){
+            System.out.println(i.next());
+        }
+    }
+
     public  static void main(String... args){
-        testGetStringsByNumberFormat();
+        testGetStringsByPattern();
     }
 }

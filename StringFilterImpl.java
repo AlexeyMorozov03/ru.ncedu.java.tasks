@@ -107,6 +107,44 @@ public class StringFilterImpl implements StringFilter {
 
     @Override
     public Iterator<String> getStringsByPattern(String pattern) {
-        return null;
+        Set<String> result = new HashSet<String>();
+        int firstIndexWildcard;
+        int lastIndexWildcard;
+
+        for (Iterator<String> i = set.iterator(); i.hasNext();){
+            String s = i.next();
+
+            if ((pattern == null) || (pattern.length() == 0)){
+                result.add(s);
+            }
+
+            else {
+                firstIndexWildcard = pattern.indexOf('*');
+                lastIndexWildcard = pattern.lastIndexOf('*');
+
+                if ((firstIndexWildcard == -1) && (pattern.compareTo(s) == 0)){
+                    result.add(s);
+                }
+
+                else if ((firstIndexWildcard == 0) && (lastIndexWildcard == pattern.length() - 1) && (s.contains(pattern.subSequence(1, pattern.length() - 1)))){
+                    result.add(s);
+                }
+
+                else if (firstIndexWildcard == lastIndexWildcard){
+                    if (((s.length() + 1) >= pattern.length()) && (pattern.substring(0, firstIndexWildcard).compareTo(s.substring(0, firstIndexWildcard)) == 0) && (pattern.substring(firstIndexWildcard + 1, pattern.length()).compareTo(s.substring(s.length() - (pattern.length() - firstIndexWildcard) + 1, s.length()))  == 0)){
+                        result.add(s);
+                    }
+                }
+
+                else if (((s.length() + 2) >= pattern.length()) && (pattern.substring(0, firstIndexWildcard).compareTo(s.substring(0, firstIndexWildcard)) == 0) && (pattern.substring(lastIndexWildcard + 1, pattern.length()).compareTo(s.substring(s.length() - (pattern.length() - lastIndexWildcard) + 1, s.length()))  == 0)){
+                    if(s.substring(firstIndexWildcard, s.length() - (pattern.length() - lastIndexWildcard - 1)).contains(pattern.subSequence(firstIndexWildcard + 1, lastIndexWildcard))){
+                        result.add(s);
+                    }
+                }
+            }
+        }
+
+        Iterator<String> iterator = result.iterator();
+        return iterator;
     }
 }
