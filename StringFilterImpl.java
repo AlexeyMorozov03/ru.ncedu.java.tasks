@@ -45,102 +45,144 @@ public class StringFilterImpl implements StringFilter {
 
     @Override
     public Iterator<String> getStringsContaining(String chars) {
-        Set<String> result = new HashSet<String>();
+        final String finalChars = chars;
+        Filter stringsContaining = new Filter() {
+            @Override
+            public boolean checkStringMatch(String checkedString) {
+                boolean result = false;
 
-        for (Iterator<String> i = set.iterator(); i.hasNext();){
-            String s = i.next();
-            if ((chars == null) || (s.contains(chars.subSequence(0, chars.length())))){
-                result.add(s);
+                if ((finalChars == null) || (finalChars.length() == 0)){
+                    result = true;
+                }
+
+                else if (checkedString != null){
+                    result = checkedString.contains(finalChars.subSequence(0, finalChars.length()));
+                }
+
+                return result;
             }
-        }
+        };
 
-        Iterator<String> iterator = result.iterator();
-        return iterator;
+        return getIterator(stringsContaining);
     }
 
     @Override
     public Iterator<String> getStringsStartingWith(String begin) {
-        String beginLowerCase = null;
-        if (begin != null){
-            beginLowerCase = begin.toLowerCase();
-        }
-        Set<String> result = new HashSet<String>();
+        final String finalBegin = begin != null ? begin.toLowerCase() : null;
 
-        for (Iterator<String> i = set.iterator(); i.hasNext();){
-            String s = i.next();
-            if ((beginLowerCase == null) || (s.indexOf(beginLowerCase) == 0)){
-                result.add(s);
+        Filter stringsStartingWith = new Filter() {
+            @Override
+            public boolean checkStringMatch(String checkedString) {
+                boolean result = false;
+
+                if (((finalBegin == null) || (finalBegin.length() == 0))){
+                    result = true;
+                }
+
+                else if (checkedString != null){
+                    result = checkedString.indexOf(finalBegin) == 0;
+                }
+
+                return result;
             }
-        }
+        };
 
-        Iterator<String> iterator = result.iterator();
-        return iterator;
+        return getIterator(stringsStartingWith);
     }
 
     @Override
     public Iterator<String> getStringsByNumberFormat(String format) {
-        Set<String> result = new HashSet<String>();
+        final String finalFormat = format;
+        Filter stringsByNumberFormat = new Filter() {
+            @Override
+            public boolean checkStringMatch(String checkedString) {
+                boolean result = false;
 
-        for (Iterator<String> i = set.iterator(); i.hasNext();){
-            String s = i.next();
-            if ((format == null) || (format.length() == 0)){
-                result.add(s);
-            }else if (s.length() == format.length()){
-                boolean error = false;
-                for (int j = 0; j < format.length(); j++){
-                    if ((format.toCharArray()[j] == '#') && (!isDigit(s.toCharArray()[j]))){
-                        error = true;
+                if ((finalFormat == null) || (finalFormat.length() == 0)){
+                    result = true;
+                }
+
+                else if ((checkedString != null) && (checkedString.length() == finalFormat.length())){
+                    boolean error = false;
+
+                    for (int j = 0; j < finalFormat.length(); j++){
+                        if ((finalFormat.toCharArray()[j] == '#') && (!isDigit(checkedString.toCharArray()[j]))){
+                            error = true;
+                        }
+
+                        if ((finalFormat.toCharArray()[j] != '#') && (finalFormat.toCharArray()[j] != checkedString.toCharArray()[j])){
+                            error = true;
+                        }
                     }
-                    if ((format.toCharArray()[j] != '#') && (format.toCharArray()[j] != s.toCharArray()[j])){
-                        error = true;
+
+                    if (!error){
+                        result = true;
                     }
                 }
-                if (!error){
-                    result.add(s);
-                }
+                return result;
             }
-        }
-
-        Iterator<String> iterator = result.iterator();
-        return iterator;
+        };
+        return getIterator(stringsByNumberFormat);
     }
 
     @Override
     public Iterator<String> getStringsByPattern(String pattern) {
+        final String finalPattern = pattern;
+        Filter stringsByPattern = new Filter() {
+            @Override
+            public boolean checkStringMatch(String checkedString) {
+                int firstIndexWildcard;
+                int lastIndexWildcard;
+                boolean result = false;
+
+                if ((finalPattern == null) || (finalPattern.length() == 0)){
+                    result = true;
+                }
+
+                else {
+                    firstIndexWildcard = finalPattern.indexOf('*');
+                    lastIndexWildcard = finalPattern.lastIndexOf('*');
+
+                    if (checkedString != null){
+                        if ((firstIndexWildcard == -1) && (finalPattern.compareTo(checkedString) == 0)){
+                            result = true;
+                        }
+
+                        else if ((firstIndexWildcard == 0) && (lastIndexWildcard == finalPattern.length() - 1) && (checkedString.contains(finalPattern.subSequence(1, finalPattern.length() - 1)))){
+                            result = true;
+                        }
+
+                        else if (firstIndexWildcard == lastIndexWildcard){
+                            if (((checkedString.length() + 1) >= finalPattern.length()) && (finalPattern.substring(0, firstIndexWildcard).compareTo(checkedString.substring(0, firstIndexWildcard)) == 0) && (finalPattern.substring(firstIndexWildcard + 1, finalPattern.length()).compareTo(checkedString.substring(checkedString.length() - (finalPattern.length() - firstIndexWildcard) + 1, checkedString.length()))  == 0)){
+                                result = true;
+                            }
+                        }
+
+                        else if (((checkedString.length() + 2) >= finalPattern.length()) && (finalPattern.substring(0, firstIndexWildcard).compareTo(checkedString.substring(0, firstIndexWildcard)) == 0) && (finalPattern.substring(lastIndexWildcard + 1, finalPattern.length()).compareTo(checkedString.substring(checkedString.length() - (finalPattern.length() - lastIndexWildcard) + 1, checkedString.length()))  == 0)){
+                            if(checkedString.substring(firstIndexWildcard, checkedString.length() - (finalPattern.length() - lastIndexWildcard - 1)).contains(finalPattern.subSequence(firstIndexWildcard + 1, lastIndexWildcard))){
+                                result = true;
+                            }
+                        }
+                    }
+
+                }
+                return result;
+            }
+        };
+        return getIterator(stringsByPattern);
+    }
+
+    private interface Filter {
+        boolean checkStringMatch(String checkedString);
+    }
+
+    private Iterator<String> getIterator(Filter filter){
         Set<String> result = new HashSet<String>();
-        int firstIndexWildcard;
-        int lastIndexWildcard;
 
         for (Iterator<String> i = set.iterator(); i.hasNext();){
             String s = i.next();
-
-            if ((pattern == null) || (pattern.length() == 0)){
+            if (filter.checkStringMatch(s)){
                 result.add(s);
-            }
-
-            else {
-                firstIndexWildcard = pattern.indexOf('*');
-                lastIndexWildcard = pattern.lastIndexOf('*');
-
-                if ((firstIndexWildcard == -1) && (pattern.compareTo(s) == 0)){
-                    result.add(s);
-                }
-
-                else if ((firstIndexWildcard == 0) && (lastIndexWildcard == pattern.length() - 1) && (s.contains(pattern.subSequence(1, pattern.length() - 1)))){
-                    result.add(s);
-                }
-
-                else if (firstIndexWildcard == lastIndexWildcard){
-                    if (((s.length() + 1) >= pattern.length()) && (pattern.substring(0, firstIndexWildcard).compareTo(s.substring(0, firstIndexWildcard)) == 0) && (pattern.substring(firstIndexWildcard + 1, pattern.length()).compareTo(s.substring(s.length() - (pattern.length() - firstIndexWildcard) + 1, s.length()))  == 0)){
-                        result.add(s);
-                    }
-                }
-
-                else if (((s.length() + 2) >= pattern.length()) && (pattern.substring(0, firstIndexWildcard).compareTo(s.substring(0, firstIndexWildcard)) == 0) && (pattern.substring(lastIndexWildcard + 1, pattern.length()).compareTo(s.substring(s.length() - (pattern.length() - lastIndexWildcard) + 1, s.length()))  == 0)){
-                    if(s.substring(firstIndexWildcard, s.length() - (pattern.length() - lastIndexWildcard - 1)).contains(pattern.subSequence(firstIndexWildcard + 1, lastIndexWildcard))){
-                        result.add(s);
-                    }
-                }
             }
         }
 

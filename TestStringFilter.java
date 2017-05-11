@@ -51,8 +51,8 @@ public class TestStringFilter {
         a.add("XYZdef");
         a.add("abc");
         a.add("abcdeef");
-        //a.add(null);
-        Iterator<String> i = a.getStringsContaining("def");
+        a.add(null);
+        Iterator<String> i = a.getStringsContaining(null);
         for (;i.hasNext();){
             System.out.println(i.next());
         }
@@ -64,8 +64,8 @@ public class TestStringFilter {
         a.add("XYZdef");
         a.add(" abc");
         a.add("abcdeef");
-        //a.add(null);
-        Iterator<String> i = a.getStringsStartingWith("");
+        a.add(null);
+        Iterator<String> i = a.getStringsStartingWith(null);
         for (;i.hasNext();){
             System.out.println(i.next());
         }
@@ -77,7 +77,7 @@ public class TestStringFilter {
         a.add("XYZdef");
         a.add(" abc");
         a.add("abcdeef");
-        //a.add(null);
+        a.add(null);
 
         a.add("(000)000-0000");
         a.add("(000)000-0001");
@@ -88,7 +88,7 @@ public class TestStringFilter {
 
         a.add("-0.00");
         //"(###)###-####", "# ###", "-#.##"
-        Iterator<String> i = a.getStringsByNumberFormat( "");
+        Iterator<String> i = a.getStringsByNumberFormat( "-#.##");
         for (;i.hasNext();){
             System.out.println(i.next());
         }
@@ -100,7 +100,7 @@ public class TestStringFilter {
         a.add("XYZdef");
         a.add(" abc");
         a.add("abcdeef");
-        //a.add(null);
+        a.add(null);
         a.add("(000)000-0000");
         a.add("(000)000-0001");
         a.add("(100)000-0000");
@@ -111,13 +111,13 @@ public class TestStringFilter {
         a.add("abdf");
 
 
-        Iterator<String> i = a.getStringsByPattern( "ab*d*f");
+        Iterator<String> i = a.getStringsByPattern( "*ab*");
         for (;i.hasNext();){
             System.out.println(i.next());
         }
     }
 
     public  static void main(String... args){
-        testGetStringsByPattern();
+        testGetStringsContaining();
     }
 }
