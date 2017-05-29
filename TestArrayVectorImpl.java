@@ -113,6 +113,7 @@ public class TestArrayVectorImpl {
     }
 
     public static void main(String... args){
+
         testGetNorm();
     }
 }
