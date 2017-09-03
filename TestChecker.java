@@ -42,7 +42,47 @@ public class TestChecker {
     }
 
     public static void testGetHrefURLPattern(){
+        String[] array = {
+                "< a href = https://www.google.com >",
+                "<\ta\thref\t=\thttps://www.google.com\t>",
+                "<\ta\nhref\r=\fhttps://www.google.com >",
+                "<\t\n\r\f a href = https://www.google.com >",
+                "<\f\r\n\t a href = https://www.google.com >",
+                "<a href = https://www.google.com >",
+                "<ahref=https://www.google.com>",
+                "<ahref=w>",
 
+                "< a href = \"https://www.go ogle.com\" >",
+                "< a href = \"https://www.go\togle.com\" >",
+                "< a href = \"https://www.go\nogle.com\" >",
+                "< a href = \"https://www.go\rogle.com\" >",
+                "< a href = \"https://www.go\fogle.com\" >",
+
+                "< a href = \"https://www.go ogle.com\" />",
+                "< a href = \"https://www.go\togle.com\" />",
+                "< a href = \"https://www.go\nogle.com\" />",
+                "< a href = \"https://www.go\rogle.com\" />",
+                "< a href = \"https://www.go\fogle.com\" />",
+
+                "< a href = https://www.go ogle.com >",
+                "< a href = https://www.go\togle.com >",
+                "< a href = https://www.go\nogle.com >",
+                "< a href = https://www.go\rogle.com >",
+                "< a href = https://www.go\fogle.com >",
+
+                "< a href = \t\t\t >",
+                "\"distant\""
+        };
+
+        Checker checker = new CheckerImpl();
+        Pattern pattern = checker.getHrefURLPattern();
+
+        for(String s : array){
+            Matcher matcher = pattern.matcher(s);
+            if(!matcher.matches()){
+                System.out.println("FAIL: " + s);
+            }
+        }
     }
 
     public static void testGetEMailPattern(){
@@ -78,6 +118,6 @@ public class TestChecker {
     }
 
     public static void main(String[] args) {
-        testGetEMailPattern();
+        testGetHrefURLPattern();
     }
 }

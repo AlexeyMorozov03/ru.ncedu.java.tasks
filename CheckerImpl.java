@@ -12,8 +12,8 @@ public class CheckerImpl implements Checker{
 
     @Override
     public Pattern getHrefURLPattern() {
-        Pattern pattern = Pattern.compile("<a\\shref\\s?=\\s?https://([^<>]*|)            /?>");
-        return null;
+        Pattern pattern = Pattern.compile("<[\t\n\r\f ]*(A|a)[\t\n\r\f ]*(HREF|href)[\t\n\r\f ]*=[\t\n\r\f ]*([\\S]|\"[^\"]+\")+[\t\n\r\f ]*/?>");
+        return pattern;
     }
 
     @Override
