@@ -1,6 +1,7 @@
 package ru.ncedu.java.tasks;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CheckerImpl implements Checker{
@@ -25,6 +26,20 @@ public class CheckerImpl implements Checker{
 
     @Override
     public boolean checkAccordance(String inputString, Pattern pattern) throws IllegalArgumentException {
+        if (inputString == null && pattern == null){
+            return true;
+        }
+
+        if ((inputString == null && pattern != null) || (inputString != null && pattern == null)){
+            throw new IllegalArgumentException();
+        }
+
+        Matcher matcher = pattern.matcher(inputString);
+
+        if(matcher.matches()){
+            return true;
+        }
+
         return false;
     }
 

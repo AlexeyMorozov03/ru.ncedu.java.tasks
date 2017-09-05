@@ -117,7 +117,16 @@ public class TestChecker {
         }
     }
 
+    public static void testCheckAccordance(){
+        Checker checker = new CheckerImpl();
+
+        Pattern pattern = Pattern.compile("^[aA]+");
+        String s = "aAA";
+
+        System.out.println(checker.checkAccordance(s, pattern));
+    }
+
     public static void main(String[] args) {
-        testGetHrefURLPattern();
+        testCheckAccordance();
     }
 }
