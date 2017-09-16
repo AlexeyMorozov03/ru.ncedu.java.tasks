@@ -1,5 +1,6 @@
 package ru.ncedu.java.tasks;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -126,7 +127,16 @@ public class TestChecker {
         System.out.println(checker.checkAccordance(s, pattern));
     }
 
+    public static void testFetchAllTemplates(){
+        StringBuffer testStringBuffer = new StringBuffer("Google-BOOBLE-MOONT_###&&&_111111_doodle");
+        Pattern pattern = Pattern.compile("[a-z]{6,6}", Pattern.CASE_INSENSITIVE);
+        Checker checker = new CheckerImpl();
+        List<String> list;
+        list = checker.fetchAllTemplates(testStringBuffer, pattern);
+        System.out.println(list);
+    }
+
     public static void main(String[] args) {
-        testCheckAccordance();
+        testFetchAllTemplates();
     }
 }

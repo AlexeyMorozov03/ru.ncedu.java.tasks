@@ -1,5 +1,6 @@
 package ru.ncedu.java.tasks;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +46,27 @@ public class CheckerImpl implements Checker{
 
     @Override
     public List<String> fetchAllTemplates(StringBuffer inputString, Pattern pattern) throws IllegalArgumentException {
-        return null;
+        if(inputString == null || pattern == null){
+            throw new IllegalArgumentException();
+        }
+
+        List<String> list = new ArrayList<>();
+
+        Matcher matcher = pattern.matcher(inputString);
+
+        boolean continueSearch = true;
+
+        int startIndex = 0;
+
+        while(continueSearch){
+            if (matcher.find(startIndex)){
+                list.add(matcher.group());
+                startIndex = matcher.end();
+            }else {
+                continueSearch = false;
+            }
+        }
+
+        return list;
     }
 }
