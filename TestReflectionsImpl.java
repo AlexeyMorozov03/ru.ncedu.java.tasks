@@ -12,7 +12,20 @@ public class TestReflectionsImpl {
         }
     }
 
+    public static void testGetProtectedMethodNames() {
+        Reflections reflection = new ReflectionsImpl();
+        Class clazz = null;
+
+        try {
+            clazz = Class.forName("ru.ncedu.java.tasks.ClassForTestingReflection");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Class was not found.", e);
+        }
+
+        System.out.println(reflection.getProtectedMethodNames(clazz));
+    }
+
     public static void main(String[] args) {
-        testGetFieldValueByName();
+        testGetProtectedMethodNames();
     }
 }

@@ -1,9 +1,7 @@
 package ru.ncedu.java.tasks;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +22,23 @@ public class ReflectionsImpl implements Reflections{
 
     @Override
     public Set<String> getProtectedMethodNames(Class clazz) {
-        return null;
+        if(clazz == null){
+            throw new NullPointerException();
+        }
+
+        Set<String> set = new HashSet<>();
+
+        Method[] methods = clazz.getDeclaredMethods();
+
+        for (Method m : methods) {
+            m.setAccessible(true);
+            int modifiers = m.getModifiers();
+            if(Modifier.isProtected(modifiers)){
+                set.add(m.getName());
+            }
+        }
+
+        return set;
     }
 
     @Override
