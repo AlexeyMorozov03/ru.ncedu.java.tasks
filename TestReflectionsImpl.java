@@ -38,7 +38,18 @@ public class TestReflectionsImpl {
         System.out.println(reflections.getAllImplementedMethodsWithSupers(clazz));
     }
 
+    public static void testGetExtendsHierarchy(){
+        Reflections reflections = new ReflectionsImpl();
+        Class clazz = null;
+        try{
+            clazz = Class.forName("ru.ncedu.java.tasks.ClassForTestingReflection2");
+        }catch (ClassNotFoundException e){
+            throw new IllegalStateException("Class was not found.", e);
+        }
+        System.out.println(reflections.getExtendsHierarchy(clazz));
+    }
+
     public static void main(String[] args) {
-        testGetAllImplementedMethodsWithSupers();
+        testGetExtendsHierarchy();
     }
 }

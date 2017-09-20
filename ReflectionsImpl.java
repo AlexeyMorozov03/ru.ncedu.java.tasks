@@ -1,10 +1,7 @@
 package ru.ncedu.java.tasks;
 
 import java.lang.reflect.*;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ReflectionsImpl implements Reflections{
     @Override
@@ -68,7 +65,12 @@ public class ReflectionsImpl implements Reflections{
 
     @Override
     public List<Class> getExtendsHierarchy(Class clazz) {
-        return null;
+        List<Class> list = new ArrayList<Class>();
+        if(clazz == null){ throw new NullPointerException(); }
+        if(clazz.getName().equalsIgnoreCase("java.lang.Object")){ return list; }
+        list.add(clazz.getSuperclass());
+        list.addAll(this.getExtendsHierarchy(clazz.getSuperclass()));
+        return list;
     }
 
     @Override
