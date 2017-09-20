@@ -2,6 +2,7 @@ package ru.ncedu.java.tasks;
 
 import java.lang.reflect.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +44,26 @@ public class ReflectionsImpl implements Reflections{
 
     @Override
     public Set<Method> getAllImplementedMethodsWithSupers(Class clazz) {
-        return null;
+        Set<Method> set = new LinkedHashSet<Method>();
+        System.out.println(clazz.getName());
+        if(clazz.getName().equals("java.lang.Object")){
+            addMethods(set, clazz);
+            return set;
+        }
+        if(clazz == null){
+            throw new NullPointerException();
+        }
+        addMethods(set, clazz);
+        set.addAll(this.getAllImplementedMethodsWithSupers(clazz.getSuperclass()));
+        return set;
+    }
+
+    private void addMethods(Set<Method> set, Class clazz) {
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method m: methods) {
+            m.setAccessible(true);
+            set.add(m);
+        }
     }
 
     @Override

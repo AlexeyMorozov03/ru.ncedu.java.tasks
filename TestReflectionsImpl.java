@@ -1,5 +1,7 @@
 package ru.ncedu.java.tasks;
 
+import java.lang.reflect.*;
+
 public class TestReflectionsImpl {
     public static void testGetFieldValueByName() {
         Reflections.SecretClass secretClassInstance = new Reflections.SecretClass("ololo");
@@ -25,7 +27,18 @@ public class TestReflectionsImpl {
         System.out.println(reflection.getProtectedMethodNames(clazz));
     }
 
+    public static void testGetAllImplementedMethodsWithSupers(){
+        Reflections reflections = new ReflectionsImpl();
+        Class clazz = null;
+        try {
+            clazz = Class.forName("ru.ncedu.java.tasks.ClassForTestingReflection2");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Class was not found.", e);
+        }
+        System.out.println(reflections.getAllImplementedMethodsWithSupers(clazz));
+    }
+
     public static void main(String[] args) {
-        testGetProtectedMethodNames();
+        testGetAllImplementedMethodsWithSupers();
     }
 }

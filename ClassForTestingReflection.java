@@ -9,6 +9,10 @@ public class ClassForTestingReflection {
         this.text = text;
     }
 
+    public String getMessage(){
+        return "Class One";
+    }
+
     protected int getIndex(){
         return index;
     }
