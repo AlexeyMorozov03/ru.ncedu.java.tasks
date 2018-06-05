@@ -85,7 +85,39 @@ public class ReflectionsImpl implements Reflections{
 
     @Override
     public String getFooFunctionResultForDefaultConstructedClass() {
-        return null;
+		Class<?> clazz = null;
+        try{
+            clazz = clazz.forName("ru.ncedu.java.tasks.Reflections");
+            clazz = clazz.getClasses()[0];
+
+            Constructor<?> constructor = clazz.getDeclaredConstructor(new Class<?>[0]);
+            constructor.setAccessible(true);
+
+            Object secretClassInstance = constructor.newInstance(new Object[0]);
+
+            Method method = clazz.getDeclaredMethod("foo", new Class<?>[0]);
+            //method = clazz.getMethod("foo", new Class<?>[] {String.class, Integer[].class});
+            method.setAccessible(true);
+
+            String result = (String) method.invoke(secretClassInstance, new Object[0]);
+            //String result = (String) method.invoke(secretClassInstance, new Object[]{"Sum", new Integer[]{1, 2, 3, 4, 5}});
+            return result;
+
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Class not found", e);
+
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("Method or constructor was not found", e);
+
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException("not access constructor", e);
+
+        } catch (InstantiationException e) {
+            throw new IllegalStateException("Constructor error", e);
+
+        } catch (InvocationTargetException e) {
+            throw new IllegalStateException("Constructor error", e);
+        }
     }
 
     @Override
