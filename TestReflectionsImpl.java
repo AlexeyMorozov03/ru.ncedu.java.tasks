@@ -49,7 +49,17 @@ public class TestReflectionsImpl {
         System.out.println(reflections.getExtendsHierarchy(clazz));
     }
 
+    public static void exampleGetFieldByName() {
+        ClassForTestingReflection obj = new ClassForTestingReflection(5, "five");
+        Class clazz = obj.getClass();
+        try{
+            System.out.println(clazz.getDeclaredField("text"));
+        }catch(NoSuchFieldException e){
+            throw new IllegalStateException("Access to the field denied.");
+        }
+    }
+
     public static void main(String[] args) {
-        testGetExtendsHierarchy();
+        exampleGetFieldByName();
     }
 }

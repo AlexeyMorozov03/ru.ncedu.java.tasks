@@ -7,7 +7,6 @@ public class ReflectionsImpl implements Reflections{
     @Override
     public Object getFieldValueByName(Object object, String fieldName) throws NoSuchFieldException {
         Class clazz = object.getClass();
-
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(true);
 
@@ -96,11 +95,11 @@ public class ReflectionsImpl implements Reflections{
             Object secretClassInstance = constructor.newInstance(new Object[0]);
 
             Method method = clazz.getDeclaredMethod("foo", new Class<?>[0]);
-            //method = clazz.getMethod("foo", new Class<?>[] {String.class, Integer[].class});
+            method = clazz.getDeclaredMethod("foo", new Class<?>[] {String.class, Integer[].class});
             method.setAccessible(true);
 
-            String result = (String) method.invoke(secretClassInstance, new Object[0]);
-            //String result = (String) method.invoke(secretClassInstance, new Object[]{"Sum", new Integer[]{1, 2, 3, 4, 5}});
+            //String result = (String) method.invoke(secretClassInstance, new Object[0]);
+            String result = (String) method.invoke(secretClassInstance, new Object[]{"Sum", new Integer[]{1, 2, 3, 4, 5}});
             return result;
 
         } catch (ClassNotFoundException e) {
